@@ -52,13 +52,14 @@ public class RestApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam("nick") String nick, @RequestParam("pass") String pass){
+    public ResponseEntity login(@RequestParam(value = "nick", required=false) String nick, @RequestParam(value="pass", required=false) String pass){
         try{
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             Optional<Usuario> usuarioEncontrado = iUsuarioService.buscarUsuario(nick);
             if(usuarioEncontrado.isPresent() && bCryptPasswordEncoder.matches(pass, usuarioEncontrado.get().getUsuPass()))
-                if(usuarioEncontrado.get().getUsuActivo())
+                if(usuarioEncontrado.get().getUsuActivo()) {
                     return ResponseEntity.ok(usuarioEncontrado.get().getUsuNick());
+                }
                 else
                     return ResponseEntity.status(404).body("Su cuenta se encuentra inactiva. Por favor contacte con el " +
                             "administrador para gestionar su reactivación.");

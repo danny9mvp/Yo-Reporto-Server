@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +14,8 @@ public class Reporte {
     private String repoTitulo;
     private String repoDescripcion;
     private String repoUsuario;
+    private Date repoFecha;
+    private String repoEstado;
     private int repoUbicacion;
     private byte[] foto;
     private Usuario usuarioByRepoUsuario;
@@ -60,6 +63,29 @@ public class Reporte {
 
     public void setRepoUsuario(String repoUsuario) {
         this.repoUsuario = repoUsuario;
+    }
+
+    @Basic
+    @Column(name = "repo_fecha")
+    @JsonProperty("fecha")
+    @Temporal(TemporalType.DATE)
+    public Date getRepoFecha(){
+        return this.repoFecha;
+    }
+
+    @Basic
+    @Column(name = "repo_estado")
+    @JsonProperty("estado")
+    public String getRepoEstado(){
+        return this.repoEstado;
+    }
+
+    public void setRepoEstado(String repoEstado){
+        this.repoEstado = repoEstado;
+    }
+
+    public void setRepoFecha(Date repoFecha){
+        this.repoFecha = repoFecha;
     }
 
     @Basic
