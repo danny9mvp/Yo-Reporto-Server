@@ -17,7 +17,7 @@ public class Reporte {
     private Date repoFecha;
     private String repoEstado;
     private int repoUbicacion;
-    private byte[] foto;
+    private String foto;
     private Usuario usuarioByRepoUsuario;
     private Ubicacion ubicacionByRepoUbicacion;
 
@@ -68,7 +68,7 @@ public class Reporte {
     @Basic
     @Column(name = "repo_fecha")
     @JsonProperty("fecha")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getRepoFecha(){
         return this.repoFecha;
     }
@@ -99,13 +99,14 @@ public class Reporte {
         this.repoUbicacion = repoUbicacion;
     }
 
+    @Basic
     @Column(name="repo_foto", unique = true)
-    @Lob
-    public byte[] getFoto() {
+    @JsonProperty("foto")
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 

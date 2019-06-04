@@ -5,6 +5,8 @@ import com.dannymvp.entities.Usuario;
 import com.dannymvp.entities.UsuarioResidencia;
 import com.dannymvp.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,9 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
@@ -30,7 +32,6 @@ public class RestApi {
     private IDepartamentoService iDepartamentoService;
     @Autowired
     private IMunicipioService iMunicipioService;
-
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestParam("usuario") String jsonUsuario,
                                     @RequestParam("usuarioResidencia") String jsonUsuarioResidencia){
@@ -71,22 +72,19 @@ public class RestApi {
         }
     }
     @PostMapping("/crearReporte")
-    public ResponseEntity<?> crearReporte(@RequestParam("reporte") String jsonReporte, @RequestParam("foto")MultipartFile foto){
+    public ResponseEntity<?> crearReporte(@RequestBody Reporte reporte){
         try{
-            ObjectMapper mapper = new ObjectMapper();
-            Reporte nuevoReporte = mapper.readValue(jsonReporte, Reporte.class);
-            nuevoReporte.setFoto(foto.getBytes());
-            Logger.getLogger("bla").info(foto.getOriginalFilename()+" "+foto.getBytes().toString());
-            Reporte reporteCreado = iReporteService.crearReporte(nuevoReporte);
+            iReporteService.crearReporte(reporte);
             return ResponseEntity.ok("Reporte creado.");
         }
         catch(Exception ex){
+            ex.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
 
     }
-    @GetMapping("/verReporte")
-    public ResponseEntity<?> verReporte(){
+    @GetMapping("/reportes")
+    public ResponseEntity<?> reportes(){
         List<Reporte> reportes = iReporteService.listarReportes();
         return ResponseEntity.ok(reportes);
     }
