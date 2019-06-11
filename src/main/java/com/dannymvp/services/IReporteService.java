@@ -18,7 +18,7 @@ public class IReporteService implements ReporteService{
 
     @Override
     public List<Reporte> listarReportesPorUsuario(String nickname) {
-        return null;
+        return reporteRepository.findAllByUsuarioByRepoUsuario(nickname);
     }
 
     @Override

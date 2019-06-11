@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +88,19 @@ public class RestApi {
     public ResponseEntity<?> reportes(){
         List<Reporte> reportes = iReporteService.listarReportes();
         return ResponseEntity.ok(reportes);
+    }
+    @GetMapping("/reportes/{nick}")
+    public ResponseEntity<?> reportesPorUsuario(@PathParam("nick") String nick){
+        try {
+            List<Reporte> reportes = iReporteService.listarReportesPorUsuario(nick);
+            if(reportes.isEmpty())
+                return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(reportes);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
     @GetMapping("/departamentos")
     public ResponseEntity<?> departamentos(){
